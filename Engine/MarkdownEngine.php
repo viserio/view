@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\View\Engines;
+namespace Viserio\Component\View\Engine;
 
 use Parsedown;
 use ParsedownExtra;

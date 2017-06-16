@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\View\Tests\Providers;
+namespace Viserio\Component\View\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Filesystem\Providers\FilesServiceProvider;
-use Viserio\Component\View\Engines\EngineResolver;
+use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
+use Viserio\Component\View\Engine\EngineResolver;
 use Viserio\Component\View\Factory;
-use Viserio\Component\View\Providers\ViewServiceProvider;
+use Viserio\Component\View\Provider\ViewServiceProvider;
 use Viserio\Component\View\ViewFinder;
 
 class ViewServiceProviderTest extends MockeryTestCase

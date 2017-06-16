@@ -5,7 +5,7 @@ namespace Viserio\Component\View\Tests\Engines;
 use Parsedown;
 use ParsedownExtra;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\View\Engines\MarkdownEngine;
+use Viserio\Component\View\Engine\MarkdownEngine;
 
 class MarkdownEngineTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\View\Providers;
+namespace Viserio\Component\View\Provider;
 
 use Interop\Container\ServiceProvider;
 use Parsedown;
@@ -9,10 +9,10 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contracts\View\Factory as FactoryContract;
 use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\View\Engines\EngineResolver;
-use Viserio\Component\View\Engines\FileEngine;
-use Viserio\Component\View\Engines\MarkdownEngine;
-use Viserio\Component\View\Engines\PhpEngine;
+use Viserio\Component\View\Engine\EngineResolver;
+use Viserio\Component\View\Engine\FileEngine;
+use Viserio\Component\View\Engine\MarkdownEngine;
+use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\Factory;
 use Viserio\Component\View\ViewFinder;
 
@@ -79,8 +79,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Viserio\Component\View\Engine\EngineResolver $engines
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */
@@ -94,8 +94,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the File engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Viserio\Component\View\Engine\EngineResolver $engines
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */
@@ -109,8 +109,8 @@ class ViewServiceProvider implements ServiceProvider
     /**
      * Register the Markdown engine implementation.
      *
-     * @param \Viserio\Component\View\Engines\EngineResolver $engines
-     * @param \Psr\Container\ContainerInterface              $container
+     * @param \Viserio\Component\View\Engine\EngineResolver $engines
+     * @param \Psr\Container\ContainerInterface             $container
      *
      * @return void
      */

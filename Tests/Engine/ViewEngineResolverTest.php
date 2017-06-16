@@ -4,7 +4,7 @@ namespace Viserio\Component\View\Tests\Engines;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contracts\View\Engine as EngineContract;
-use Viserio\Component\View\Engines\EngineResolver;
+use Viserio\Component\View\Engine\EngineResolver;
 
 class ViewEngineResolverTest extends MockeryTestCase
 {
