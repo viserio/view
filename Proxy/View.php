@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\View\Proxie;
+namespace Viserio\Component\View\Proxy;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
