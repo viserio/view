@@ -4,31 +4,17 @@ namespace Viserio\Component\View;
 
 use Closure;
 use InvalidArgumentException;
-use Viserio\Component\Contracts\Support\Arrayable;
-use Viserio\Component\Contracts\View\Engine as EngineContract;
-use Viserio\Component\Contracts\View\EngineResolver as EngineResolverContract;
-use Viserio\Component\Contracts\View\Factory as FactoryContract;
-use Viserio\Component\Contracts\View\Finder as FinderContract;
-use Viserio\Component\Contracts\View\View as ViewContract;
+use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Component\Contract\View\Engine as EngineContract;
+use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
+use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
+use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
-class Factory implements FactoryContract
+class ViewFactory implements FactoryContract
 {
     use NormalizeNameTrait;
-
-    /**
-     * The engines instance.
-     *
-     * @var \Viserio\Component\Contracts\View\EngineResolver
-     */
-    protected $engines;
-
-    /**
-     * The view finder implementation.
-     *
-     * @var \Viserio\Component\Contracts\View\Finder
-     */
-    protected $finder;
 
     /**
      * Array of registered view name aliases.
@@ -56,7 +42,7 @@ class Factory implements FactoryContract
      *
      * @var array
      */
-    protected $extensions = [
+    protected static $extensions = [
         'php'   => 'php',
         'phtml' => 'php',
         'css'   => 'file',
@@ -72,10 +58,24 @@ class Factory implements FactoryContract
     protected $shared = [];
 
     /**
+     * The engines instance.
+     *
+     * @var \Viserio\Component\Contract\View\EngineResolver
+     */
+    private $engines;
+
+    /**
+     * The view finder implementation.
+     *
+     * @var \Viserio\Component\Contract\View\Finder
+     */
+    private $finder;
+
+    /**
      * Create a new factory instance.
      *
-     * @param \Viserio\Component\Contracts\View\EngineResolver $engines
-     * @param \Viserio\Component\Contracts\View\Finder         $finder
+     * @param \Viserio\Component\Contract\View\EngineResolver $engines
+     * @param \Viserio\Component\Contract\View\Finder         $finder
      */
     public function __construct(
         EngineResolverContract $engines,
@@ -84,7 +84,7 @@ class Factory implements FactoryContract
         $this->engines = $engines;
         $this->finder  = $finder;
 
-        $this->share('__env', $this);
+        //$this->share('__env', $this);
     }
 
     /**
@@ -189,14 +189,15 @@ class Factory implements FactoryContract
      */
     public function getEngineFromPath(string $path): EngineContract
     {
-        $engine = \explode('|', $path);
-        $path   = $engine[1] ?? $path;
+        $engine    = \explode('|', $path);
+        $path      = $engine[1] ?? $path;
+        $extension = $this->getExtension($path);
 
-        if (! $extension = $this->getExtension($path)) {
-            throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s]', $path));
+        if ($extension === null) {
+            throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s].', $path));
         }
 
-        return $this->engines->resolve($this->extensions[$extension]);
+        return $this->engines->resolve(self::$extensions[$extension]);
     }
 
     /**
@@ -206,8 +207,8 @@ class Factory implements FactoryContract
     {
         $keys = \is_array($key) ? $key : [$key => $value];
 
-        foreach ($keys as $key => $value) {
-            $this->shared[$key] = $value;
+        foreach ($keys as $k => $v) {
+            $this->shared[$k] = $v;
         }
 
         return $value;
@@ -276,15 +277,15 @@ class Factory implements FactoryContract
     {
         $this->getFinder()->addExtension($extension);
 
-        if (isset($resolver)) {
+        if ($resolver !== null) {
             $this->engines->register($engine, $resolver);
         }
 
-        if (isset($this->extensions[$extension])) {
-            unset($this->extensions[$extension]);
+        if (isset(self::$extensions[$extension])) {
+            unset(self::$extensions[$extension]);
         }
 
-        $this->extensions = \array_merge([$extension => $engine], $this->extensions);
+        self::$extensions = \array_merge([$extension => $engine], self::$extensions);
 
         return $this;
     }
@@ -294,7 +295,7 @@ class Factory implements FactoryContract
      */
     public function getExtensions(): array
     {
-        return $this->extensions;
+        return self::$extensions;
     }
 
     /**
@@ -362,7 +363,7 @@ class Factory implements FactoryContract
             return $this->endsWith($path, $value);
         };
 
-        foreach (\array_keys($this->extensions) as $key => $value) {
+        foreach (\array_keys(self::$extensions) as $key => $value) {
             if ($callback($value)) {
                 return $value;
             }
@@ -374,11 +375,11 @@ class Factory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\Component\Contracts\View\Factory            $factory
-     * @param \Viserio\Component\Contracts\View\Engine             $engine
-     * @param string                                               $view
-     * @param array                                                $fileInfo
-     * @param array|\Viserio\Component\Contracts\Support\Arrayable $data
+     * @param \Viserio\Component\Contract\View\Factory            $factory
+     * @param \Viserio\Component\Contract\View\Engine             $engine
+     * @param string                                              $view
+     * @param array                                               $fileInfo
+     * @param array|\Viserio\Component\Contract\Support\Arrayable $data
      *
      * @return \Viserio\Component\View\View
      */
@@ -404,7 +405,7 @@ class Factory implements FactoryContract
     {
         $length = \mb_strlen($needle);
 
-        if ($length == 0) {
+        if ($length === 0) {
             return true;
         }
 
