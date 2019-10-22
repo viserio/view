@@ -11,4 +11,13 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-return 'content';
+namespace Viserio\Component\View\Tests;
+
+/**
+ * @internal
+ */
+final class StaticMemory
+{
+    /** @var \Closure */
+    public static $fileExists;
+}
